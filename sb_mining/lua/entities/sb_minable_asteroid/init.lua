@@ -3,12 +3,6 @@ include("shared.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("cl_init.lua")
 
-function ENT:Initialize()
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-end
-
 function ENT:Setup(model, resources, position, spot)
     self:SetModel(model)
     self.resources = resources
@@ -32,41 +26,6 @@ local function deepCopy(tab)
 		end
 	end
 	return toR
-end
-
-function ENT:ResizePhysics()
-	if self:GetPhysicsObject():IsValid() then 
-		local oldFrozen = self:GetPhysicsObject():IsMotionEnabled()
-		local s = self:GetAsteroidScale()
-		local vertices = {}
-		for i, vertex in pairs(self.originalMesh) do
-			vertices[i] = deepCopy(vertex)
-			vertices[i].pos = vertex.pos * s
-		end
-		self:PhysicsFromMesh(vertices)
-		self:EnableCustomCollisions(true)
-		self:GetPhysicsObject():EnableMotion(oldFrozen)
-		self:GetPhysicsObject():SetMass(MiningAddon.MaxAsteroidMass/MiningAddon.ModelScaleMultiplier * s)
-	end
-end
-
-function ENT:Think()
-	if self.currTotalResources <= 0 then
-		self:Remove()
-	elseif not self.oldTotalResources or self.oldTotalResources - self.currTotalResources > 0 then
-		local s = --[[MiningAddon.ModelScaleMultiplier *]] self.currTotalResources / MiningAddon.MaxResourcePerAsteroid
-		if s > MiningAddon.MinModelScale then
-			self:SetAsteroidScale(s)
-			if CurTime() - (self.lastPhysicsResize or 0) > 1 then
-				self:ResizePhysics()
-				self.lastPhysicsResize = CurTime()
-			end
-		end
-		self.oldTotalResources = self.currTotalResources
-	end
-
-	self:NextThink(CurTime() + 1)
-	return true
 end
 
 function ENT:GetResources()     -- Returning a COPY of the table

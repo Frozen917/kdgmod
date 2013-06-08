@@ -56,7 +56,7 @@ if SERVER then
 	MiningAddon.MaxRespawnTime = 6
 	MiningAddon.MaxResourcePerAsteroid = 80000
 	MiningAddon.MaxAsteroidMass = 50000
-	MiningAddon.MinModelScale = 1
+	MiningAddon.MinModelScale = 0.1
 	MiningAddon.SpawnRadius = 1500
 	MiningAddon.MaxAsteroids = 16
 	MiningAddon.MinAsteroidsPerSpot = 2
@@ -89,9 +89,9 @@ if SERVER then
 			
 			asteroid:Setup(model, res, asteroidPos, spot)
 			asteroid:Spawn()
-			if asteroid:GetPhysicsObject():IsValid() then
-				asteroid.originalMesh = deepCopy(asteroid:GetPhysicsObject():GetMesh())
-			end
+			--if asteroid:GetPhysicsObject():IsValid() then
+			--	asteroid.originalMeshes = deepCopy(asteroid:GetPhysicsObject():GetMeshConvexes())
+			--end
 			asteroid:SetSkin(spot.oreIndex)
 			asteroid:Activate()
 			asteroid:SetNetworkedString("Owner","World")
