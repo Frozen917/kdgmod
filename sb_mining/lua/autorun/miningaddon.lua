@@ -1,17 +1,17 @@
 if not MiningAddon then MiningAddon = {} end
 
 MiningAddon.AsteroidModels = {
-	--[["models/ce_ls3additional/asteroids/asteroid_200.mdl",
+	"models/ce_ls3additional/asteroids/asteroid_200.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_250.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_300.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_350.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_400.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_450.mdl",
-	"models/ce_ls3additional/asteroids/asteroid_500.mdl"]]
-	"models/mandrac/asteroid/geode1.mdl",
+	"models/ce_ls3additional/asteroids/asteroid_500.mdl"
+	--[["models/mandrac/asteroid/geode1.mdl",
 	"models/mandrac/asteroid/geode2.mdl",
 	"models/mandrac/asteroid/geode3.mdl",
-	"models/mandrac/asteroid/geode4.mdl"
+	"models/mandrac/asteroid/geode4.mdl"]]
 }
 
 MiningAddon.OreTypes = {
@@ -52,15 +52,15 @@ if SERVER then
 		MiningAddon.AsteroidCount = 0
 	end
 	MiningAddon.MinRespawnTime = 3
-	MiningAddon.ModelScaleMultiplier = 8
+	MiningAddon.ModelScaleMultiplier = 5
 	MiningAddon.MaxRespawnTime = 6
 	MiningAddon.MaxResourcePerAsteroid = 80000
 	MiningAddon.MaxAsteroidMass = 50000
-	MiningAddon.MinModelScale = 2
+	MiningAddon.MinModelScale = 0.5
 	MiningAddon.SpawnRadius = 1500
 	MiningAddon.MaxAsteroids = 16
-	MiningAddon.MinAsteroidsPerSpot = 2
-	MiningAddon.MaxAsteroidsPerSpot = 6
+	MiningAddon.MinAsteroidsPerSpot = 1
+	MiningAddon.MaxAsteroidsPerSpot = 1
 
 	function MiningAddon.ComputeNewAsteroidPos(spot)
 		return spot.spotPos + Vector(math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius), math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius), math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius))

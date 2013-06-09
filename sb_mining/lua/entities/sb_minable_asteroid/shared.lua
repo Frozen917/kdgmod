@@ -14,7 +14,7 @@ ENT.AdminSpawnable  = false
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "AsteroidScale" )
 end
-print("shared")
+
 local function deepCopy(tab)
 	local toR = {}
 	for k,v in pairs(tab) do
@@ -30,12 +30,14 @@ local function deepCopy(tab)
 end
 
 function ENT:Initialize()
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	
-	if self:GetPhysicsObject():IsValid() then
-		self.originalMesh = self:GetPhysicsObject():GetMesh()
+	if SERVER then
+		self:PhysicsInit(SOLID_VPHYSICS)
+		self:SetMoveType(MOVETYPE_VPHYSICS)
+		self:SetSolid(SOLID_VPHYSICS)
+		
+		if self:GetPhysicsObject():IsValid() then
+			self.originalMesh = self:GetPhysicsObject():GetMesh()
+		end
 	end
 end
 
@@ -52,8 +54,6 @@ function ENT:ResizePhysicsServer()
 		end
 		
 		self:PhysicsFromMesh(newMesh)
-		self:PhysicsInit( SOLID_CUSTOM )
-
 		self:EnableCustomCollisions(true)
 
 		self:GetPhysicsObject():EnableMotion(oldFrozen)
@@ -75,7 +75,7 @@ function ENT:Think()
 	
 	if CurTime() - (self.lastPhysicsResize or 0) > 15 then
 		if SERVER then
-			self:ResizePhysicsServer()
+			--self:ResizePhysicsServer()
 		end
 		self.lastPhysicsResize = CurTime()
 	end
