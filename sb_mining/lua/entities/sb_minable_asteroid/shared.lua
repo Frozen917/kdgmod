@@ -14,19 +14,7 @@ ENT.AdminSpawnable  = false
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "AsteroidScale" )
 end
-
-function ENT:Initialize()
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	
-	if self:GetPhysicsObject():IsValid() then
-		self.originalConvexes = self:GetPhysicsObject():GetMeshConvexes()
-		self:PhysicsInitMultiConvex(self.originalConvexes)
-		self.originalMesh = self:GetPhysicsObject():GetMesh()
-	end
-end
-
+print("shared")
 local function deepCopy(tab)
 	local toR = {}
 	for k,v in pairs(tab) do
@@ -41,31 +29,34 @@ local function deepCopy(tab)
 	return toR
 end
 
+function ENT:Initialize()
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetMoveType(MOVETYPE_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
+	
+	if self:GetPhysicsObject():IsValid() then
+		self.originalMesh = self:GetPhysicsObject():GetMesh()
+	end
+end
+
 function ENT:ResizePhysicsServer()
 	if self:GetPhysicsObject():IsValid() then 
 		local oldFrozen = self:GetPhysicsObject():IsMotionEnabled()
 		self:GetPhysicsObject():EnableMotion(false)
 		
 		local s = self:GetAsteroidScale()
-		local aMultiConvex = {}
-		print("aaaa")
-		PrintTable(self.originalConvexes)
-		for i, xConvex in ipairs( self.originalConvexes ) do
-			print("i="..tostring(i))
-			aMultiConvex[i] = {}
-			for k, vVert in pairs( xConvex ) do
-				aMultiConvex[i][k] = vVert.pos * s
-			end
-			
+		local newMesh = {}
+		for i, vertex in pairs( self.originalMesh ) do
+			newMesh[i] = deepCopy(vertex)
+			newMesh[i].pos = vertex.pos * s
 		end
 		
+		self:PhysicsFromMesh(newMesh)
+		self:PhysicsInit( SOLID_CUSTOM )
 
-		self:PhysicsInitMultiConvex(aMultiConvex)
 		self:EnableCustomCollisions(true)
-		--self:SetCustomCollisionCheck(true)
+
 		self:GetPhysicsObject():EnableMotion(oldFrozen)
-		--self:GetPhysicsObject():SetMass(MiningAddon.MaxAsteroidMass/MiningAddon.ModelScaleMultiplier * s)
-		
 	end
 end
 
@@ -85,8 +76,6 @@ function ENT:Think()
 	if CurTime() - (self.lastPhysicsResize or 0) > 15 then
 		if SERVER then
 			self:ResizePhysicsServer()
-		else
-		
 		end
 		self.lastPhysicsResize = CurTime()
 	end

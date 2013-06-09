@@ -10,10 +10,6 @@ function ENT:DrawCustom()
 	self:DrawModel()
 end
 
-function ENT:Initialize()
-	spawnedAsteroids[self:EntIndex()] = self
-end
-
 function ENT:OnRemove()
 	spawnedAsteroids[self:EntIndex()] = nil
 end

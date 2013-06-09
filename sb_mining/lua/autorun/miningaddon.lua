@@ -56,7 +56,7 @@ if SERVER then
 	MiningAddon.MaxRespawnTime = 6
 	MiningAddon.MaxResourcePerAsteroid = 80000
 	MiningAddon.MaxAsteroidMass = 50000
-	MiningAddon.MinModelScale = 0.1
+	MiningAddon.MinModelScale = 2
 	MiningAddon.SpawnRadius = 1500
 	MiningAddon.MaxAsteroids = 16
 	MiningAddon.MinAsteroidsPerSpot = 2
