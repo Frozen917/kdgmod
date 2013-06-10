@@ -38,13 +38,11 @@ function ENT:Initialize()
 		self.originalMesh = self:GetPhysicsObject():GetMesh()
 	end
 	if CLIENT then
-		spawnedAsteroids[self:EntIndex()] = s
-	else
-		self:SetAsteroidScale(1)
+		spawnedAsteroids[self:EntIndex()] = self
 	end
 end
 
-function ENT:ResizePhysicsServer()
+function ENT:ResizePhysics()
 	if self:GetPhysicsObject():IsValid() then 
 		local oldFrozen = self:GetPhysicsObject():IsMotionEnabled()
 		self:GetPhysicsObject():EnableMotion(false)
@@ -63,27 +61,4 @@ function ENT:ResizePhysicsServer()
 	end
 end
 
-function ENT:Think()
-	if SERVER then
-		if self.currTotalResources <= 0 then
-			self:Remove()
-		elseif not self.oldTotalResources or self.oldTotalResources - self.currTotalResources > 0 then
-			local s = MiningAddon.ModelScaleMultiplier * self.currTotalResources / MiningAddon.MaxResourcePerAsteroid
-			if s > MiningAddon.MinModelScale then
-				self:SetAsteroidScale(s)
-			end
-			self.oldTotalResources = self.currTotalResources
-		end
-	end
-	
-	if CurTime() - (self.lastPhysicsResize or 0) > 15 then
-		if SERVER then
-			--self:ResizePhysicsServer()
-		end
-		self.lastPhysicsResize = CurTime()
-	end
-
-	self:NextThink(CurTime() + 1)
-	return true
-end
 

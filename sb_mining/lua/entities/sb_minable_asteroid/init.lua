@@ -14,6 +14,30 @@ function ENT:Setup(model, resources, position, spot)
 	end
 end
 
+function ENT:UpdateScale()
+	local s = MiningAddon.ModelScaleMultiplier * self.currTotalResources / MiningAddon.MaxResourcePerAsteroid
+	if s > MiningAddon.MinModelScale then
+		self:SetAsteroidScale(s)
+	end
+end
+
+function ENT:Think()
+	if self.currTotalResources <= 0 then
+		self:Remove()
+	elseif not self.oldTotalResources or self.oldTotalResources - self.currTotalResources > 0 then
+		self:UpdateScale()
+		if CurTime() - (self.lastPhysicsResize or 0) > 2 then
+			self:ResizePhysics()
+			self.lastPhysicsResize = CurTime()
+		end
+		self.oldTotalResources = self.currTotalResources
+	end
+	
+
+	self:NextThink(CurTime() + 0.5)
+	return true
+end
+
 local function deepCopy(tab)
 	local toR = {}
 	for k,v in pairs(tab) do

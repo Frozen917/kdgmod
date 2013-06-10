@@ -60,7 +60,7 @@ if SERVER then
 	MiningAddon.SpawnRadius = 1500
 	MiningAddon.MaxAsteroids = 16
 	MiningAddon.MinAsteroidsPerSpot = 1
-	MiningAddon.MaxAsteroidsPerSpot = 1
+	MiningAddon.MaxAsteroidsPerSpot = 6
 
 	function MiningAddon.ComputeNewAsteroidPos(spot)
 		return spot.spotPos + Vector(math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius), math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius), math.random(-MiningAddon.SpawnRadius, MiningAddon.SpawnRadius))
@@ -76,7 +76,7 @@ if SERVER then
 			local res = {}
 			--local ores = table.Copy(MiningAddon.OreTypes)
 			
-			local currentResAmount = math.random(MiningAddon.MaxResourcePerAsteroid/10, MiningAddon.MaxResourcePerAsteroid)
+			local currentResAmount = math.random(math.min(MiningAddon.MaxResourcePerAsteroid*MiningAddon.MinModelScale, MiningAddon.MaxResourcePerAsteroid/10) , MiningAddon.MaxResourcePerAsteroid)
 			res[MiningAddon.OreTypes[spot.oreIndex]] = currentResAmount
 			--[[for _, ore in ipairs(ores) do
 				if math.random() >= 0.5 and currentResAmount <= MiningAddon.MaxResourcePerAsteroid then
@@ -89,9 +89,6 @@ if SERVER then
 			asteroid:SetAngles(Angle(math.random(0,360), math.random(0,360), math.random(0,360)))
 			asteroid:Setup(model, res, asteroidPos, spot)
 			asteroid:Spawn()
-			--if asteroid:GetPhysicsObject():IsValid() then
-			--	asteroid.originalMeshes = deepCopy(asteroid:GetPhysicsObject():GetMeshConvexes())
-			--end
 			asteroid:SetSkin(spot.oreIndex)
 			asteroid:Activate()
 			asteroid:SetNetworkedString("Owner","World")
@@ -107,6 +104,7 @@ if SERVER then
 	function MiningAddon.RefillAsteroidSpots()
 		MiningAddon.AsteroidCount = 0
 		for _, spot in pairs(MiningAddon.currentSpots) do
+			math.randomseed(CurTime())
 			MiningAddon.AsteroidCount = MiningAddon.AsteroidCount + spot.asteroidCount
 			local newCount = math.random(MiningAddon.MinAsteroidsPerSpot, MiningAddon.MaxAsteroidsPerSpot)
 			if spot.asteroidCount == 0 then spot.oreIndex = math.random(1, #MiningAddon.OreTypes) end
