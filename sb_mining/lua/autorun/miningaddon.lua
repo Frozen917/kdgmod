@@ -135,7 +135,7 @@ if SERVER then
 					asteroidCount = 0,
 					asteroids = {}
 				}
-			end -- On vérifie qu'il y a assez d'astéroides toutes les 5 secondes
+			end -- On vérifie qu'il y a assez d'astéroides toutes les 15 secondes
 			timer.Create("RefillAsteroidSpots", 15, 0, MiningAddon.RefillAsteroidSpots)
 		else
 			print("No asteroid spot defined for map " .. game.GetMap())

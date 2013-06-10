@@ -1,6 +1,5 @@
 include("shared.lua")
 
-
 function ENT:DrawCustom()
 	local scale = self:GetAsteroidScale()
 	local vscale = Vector( scale, scale, scale)
