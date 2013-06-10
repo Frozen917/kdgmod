@@ -26,11 +26,14 @@ function ENT:Think()
 		self:Remove()
 	elseif not self.oldTotalResources or self.oldTotalResources - self.currTotalResources > 0 then
 		self:UpdateScale()
+		self:SetUpdateNeeded(true)
 		if CurTime() - (self.lastPhysicsResize or 0) > 2 then
 			self:ResizePhysics()
 			self.lastPhysicsResize = CurTime()
 		end
 		self.oldTotalResources = self.currTotalResources
+	else
+		self:SetUpdateNeeded(false)
 	end
 	
 

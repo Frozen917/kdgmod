@@ -104,7 +104,7 @@ if SERVER then
 	function MiningAddon.RefillAsteroidSpots()
 		MiningAddon.AsteroidCount = 0
 		for _, spot in pairs(MiningAddon.currentSpots) do
-			math.randomseed(CurTime())
+			math.randomseed(os.time())
 			MiningAddon.AsteroidCount = MiningAddon.AsteroidCount + spot.asteroidCount
 			local newCount = math.random(MiningAddon.MinAsteroidsPerSpot, MiningAddon.MaxAsteroidsPerSpot)
 			if spot.asteroidCount == 0 then spot.oreIndex = math.random(1, #MiningAddon.OreTypes) end
