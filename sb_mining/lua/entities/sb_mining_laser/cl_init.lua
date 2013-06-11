@@ -20,11 +20,6 @@ local laserMat = CreateMaterial("MiningLaserMat", "UnlitGeneric",{
 
 function ENT:Initialize()
 	self.emitter = ParticleEmitter(self:GetPos())
-	spawnedMininglasers[self:EntIndex()] = self
-end
-
-function ENT:OnRemove()
-	spawnedMininglasers[self:EntIndex()] = nil
 end
 
 function ENT:Draw()

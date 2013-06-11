@@ -10,10 +10,6 @@ function ENT:DrawCustom()
 	self:DrawModel()
 end
 
-function ENT:OnRemove()
-	spawnedAsteroids[self:EntIndex()] = nil
-end
-
 function ENT:Think()
 	if self:GetAsteroidScale() > 0 and self:GetUpdateNeeded() then
 		self:ResizePhysics()

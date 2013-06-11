@@ -31,12 +31,14 @@ local function deepCopy(tab)
 end
 
 function ENT:Initialize()
-	if CLIENT then
-		spawnedAsteroids[self:EntIndex()] = self
-	end
 	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
+	
+	if SERVER then
+		self:SetMoveType(MOVETYPE_VPHYSICS)
+		self:SetSolid(SOLID_VPHYSICS)
+	else
+		print("init client")
+	end
 	
 	if self:GetPhysicsObject():IsValid() then
 		self.originalMesh = self:GetPhysicsObject():GetMesh()
