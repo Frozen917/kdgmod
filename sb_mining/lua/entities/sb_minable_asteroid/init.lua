@@ -18,6 +18,8 @@ function ENT:UpdateScale()
 	local s = MiningAddon.ModelScaleMultiplier * self.currTotalResources / MiningAddon.MaxResourcePerAsteroid
 	if s > MiningAddon.MinModelScale then
 		self:SetAsteroidScale(s)
+	else
+		self:SetAsteroidScale(MiningAddon.MinModelScale)
 	end
 end
 
