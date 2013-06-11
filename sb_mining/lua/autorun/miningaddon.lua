@@ -56,7 +56,7 @@ if SERVER then
 	MiningAddon.MaxRespawnTime = 6
 	MiningAddon.MaxResourcePerAsteroid = 80000
 	MiningAddon.MaxAsteroidMass = 50000
-	MiningAddon.MinModelScale = 0.5
+	MiningAddon.MinModelScale = 1
 	MiningAddon.SpawnRadius = 1500
 	MiningAddon.MaxAsteroids = 16
 	MiningAddon.MinAsteroidsPerSpot = 1
@@ -104,10 +104,11 @@ if SERVER then
 	function MiningAddon.RefillAsteroidSpots()
 		MiningAddon.AsteroidCount = 0
 		for _, spot in pairs(MiningAddon.currentSpots) do
-			math.randomseed(os.time())
 			MiningAddon.AsteroidCount = MiningAddon.AsteroidCount + spot.asteroidCount
 			local newCount = math.random(MiningAddon.MinAsteroidsPerSpot, MiningAddon.MaxAsteroidsPerSpot)
+			print("newCount = "..newCount)
 			if spot.asteroidCount == 0 then spot.oreIndex = math.random(1, #MiningAddon.OreTypes) end
+			print("oreIndex = " .. spot.oreIndex)
 			if spot.asteroidCount < newCount and not spot.spawning and MiningAddon.AsteroidCount + (newCount - spot.asteroidCount) <= MiningAddon.MaxAsteroids then
 				spot.spawning = true
 				timer.Simple(math.random(MiningAddon.MinRespawnTime, MiningAddon.MaxRespawnTime), function()
@@ -133,7 +134,8 @@ if SERVER then
 				MiningAddon.currentSpots[i] = {
 					spotPos = pos,
 					asteroidCount = 0,
-					asteroids = {}
+					spawning = false,
+					oreIndex = nil
 				}
 			end -- On vérifie qu'il y a assez d'astéroides toutes les 15 secondes
 			timer.Create("RefillAsteroidSpots", 15, 0, MiningAddon.RefillAsteroidSpots)
@@ -147,12 +149,12 @@ else
 	if not spawnedAsteroids then spawnedAsteroids = {} end
 	
 	hook.Add("PostDrawOpaqueRenderables", "MiningAddonAlwaysRender", function()
-		for _, l in pairs(spawnedMininglasers) do
+		for _, l in pairs(ents.FindByClass("sb_mining_laser")) do
 			if l then
 				l:DrawCustom()
 			end
 		end
-		for _, ast in pairs(spawnedAsteroids) do
+		for _, ast in pairs(ents.FindByClass("sb_minable_asteroid")) do
 			if ast then
 				ast:DrawCustom()
 			end
