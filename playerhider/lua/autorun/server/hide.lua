@@ -107,9 +107,8 @@ function PlayerHider.PlayerConnected(ply)
 	}
 	if PlayerHider.ShouldAddToHideList(ply) then
 		PlayerHider.hideServerside(ply)
-		local pos = ply:GetPos()
 		timer.Simple(1, function()
-			ply:SetPos(pos + Vector(0,0,50))
+			ply:Spawn()
 		end)
 		PlayerHider.updateAllClients()
 	end
