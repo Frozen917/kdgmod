@@ -32,25 +32,22 @@ end
 
 function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
-	
-	if SERVER then
-		self:SetMoveType(MOVETYPE_VPHYSICS)
-		self:SetSolid(SOLID_VPHYSICS)
-	else
-		print("init client")
-	end
+
+	self:SetMoveType(MOVETYPE_NONE)
+	self:SetSolid(SOLID_VPHYSICS)
 	
 	if self:GetPhysicsObject():IsValid() then
 		self.originalMesh = self:GetPhysicsObject():GetMesh()
+		self:GetPhysicsObject():EnableMotion(false)
 	end
+	
 	
 end
 
 function ENT:ResizePhysics()
 	if self:GetPhysicsObject():IsValid() then 
-		local oldFrozen = self:GetPhysicsObject():IsMotionEnabled()
-		self:GetPhysicsObject():EnableMotion(false)
-		
+		local oldSolid = self:GetSolid()
+		self:SetSolid(SOLID_NONE)
 		local s = self:GetAsteroidScale()
 		local newMesh = {}
 		for i, vertex in pairs( self.originalMesh ) do
@@ -60,8 +57,8 @@ function ENT:ResizePhysics()
 		
 		self:PhysicsFromMesh(newMesh)
 		self:EnableCustomCollisions(true)
-
-		self:GetPhysicsObject():EnableMotion(oldFrozen)
+		self:SetSolid(oldSolid)
+		self:GetPhysicsObject():EnableMotion(false)
 	end
 end
 

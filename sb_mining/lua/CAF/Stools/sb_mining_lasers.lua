@@ -79,7 +79,7 @@ function mining_laser_func(ent, type, sub_type, devinfo, Extra_Data, ent_extras)
     local maxhealth = 200
 
 	ent.caf.custom.resource = ent_extras.resType
-	ent.name = devinfo.Name
+	ent:SetCustomEntName(devinfo.Name)
 	ent:SetupLaser(ent_extras.resType, ent_extras.resAmount, ent_extras.energyRate, ent_extras.laserPos, ent_extras.direction)
 	
 	CAF.GetAddon("Resource Distribution").RegisterNonStorageDevice(ent)
@@ -97,12 +97,12 @@ TOOL.Devices = {
         func = mining_laser_func,
         devices = {
             laser_type_1 = {
-                Name = capitalize(MiningAddon.OreTypes[1]).." Laser",
+                Name = capitalize(MiningAddon.Ores[1]).." Mining Laser",
                 model = "models/mandrac/laser5.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					resType = MiningAddon.OreTypes[1],
+					resType = MiningAddon.Ores[1],
 					resRate = 100,
 					energyRate = 200,
 					laserPos = Vector(-70.08, 0, 0),
@@ -110,12 +110,12 @@ TOOL.Devices = {
 				}
             },
             laser_type_2 = {
-                Name = capitalize(MiningAddon.OreTypes[2]).." Laser",
+                Name = capitalize(MiningAddon.Ores[2]).." Mining Laser",
                 model = "models/mandrac/laser5.mdl",
                 skin = 0,
                 legacy = false,
 				ent_extras = {
-					resType = MiningAddon.OreTypes[2],
+					resType = MiningAddon.Ores[2],
 					resRate = 100,
 					energyRate = 200,
 					laserPos = Vector(-70.08, 0, 0),
@@ -123,12 +123,12 @@ TOOL.Devices = {
 				}
             },
 			laser_type_3 = {
-                Name = capitalize(MiningAddon.OreTypes[3]).." Laser",
+                Name = capitalize(MiningAddon.Ores[3]).." Mining Laser",
                 model = "models/mandrac/laser5.mdl",
                 skin = 0,
                 legacy = false,
 				ent_extras = {
-					resType = MiningAddon.OreTypes[3],
+					resType = MiningAddon.Ores[3],
 					resRate = 100,
 					energyRate = 200,
 					laserPos = Vector(-70.08, 0, 0),

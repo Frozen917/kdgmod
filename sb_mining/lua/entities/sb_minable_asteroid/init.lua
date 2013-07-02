@@ -43,20 +43,6 @@ function ENT:Think()
 	return true
 end
 
-local function deepCopy(tab)
-	local toR = {}
-	for k,v in pairs(tab) do
-		if type(v) == "table" then
-			toR[k] = deepCopy(v)
-		elseif type(v) == "Vector" then
-			toR[k] = Vector(v.x, v.y, v.z)
-		else
-			toR[k] = v
-		end
-	end
-	return toR
-end
-
 function ENT:GetResources()     -- Returning a COPY of the table
     return table.Copy(self.resources)
 end

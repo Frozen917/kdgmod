@@ -22,13 +22,14 @@ function ENT:Initialize()
 	self.emitter = ParticleEmitter(self:GetPos())
 end
 
-function ENT:Draw()
+function ENT:Think() 
+	self.PrintName = self:GetCustomEntName()
 end
 
 function ENT:DrawCustom()
-	l.BaseClass.Draw(l)
+	self.BaseClass.Draw(self)
 	if self:GetOOO() == 1 then
-		local color = MiningAddon.OreColors[self:GetOreType()] or Color(255,255,255)
+		local color = MiningAddon.LaserColors[self:GetOreType()]
 		local startPos = self:LocalToWorld(self:GetLaserBeamStart())
 		local endPos = self:LocalToWorld(self:GetLaserBeamStart() + self:GetLaserBeamDirection() * self:GetLaserBeamDistance())
 		if self:GetMining() then
@@ -38,13 +39,13 @@ function ENT:DrawCustom()
 					part:SetColor(255,255,255,math.random(255))
 					part:SetVelocity(VectorRand() * 30)
 					part:SetDieTime(0.8)
-					part:SetGravity((startPos - endPos):GetNormalized() *50)
+					part:SetGravity((startPos - endPos):GetNormalized() * 50)
 					part:SetLifeTime(0)
 					part:SetStartSize(5)
 					part:SetEndSize(0)
 				end
 			end
-			for i=1,5*(startPos - endPos):Length()/self.LaserRange do
+			for i=1, 7 do
 				local lolpos = endPos + VectorRand() * 10
 				local part2 = self.emitter:Add("sprites/light_glow02_add", lolpos)
 				if part2 then
@@ -59,6 +60,6 @@ function ENT:DrawCustom()
 		end
 		render.SetMaterial(laserMat)
 		--render.SetColorMaterial(Color(255,255,0,255))
-		render.DrawBeam(startPos, endPos, 12, 5*self.LaserRange/self:GetLaserBeamDistance(), 0.1, Color(255,255,255,255))
+		render.DrawBeam(startPos, endPos, 12, 5*self:GetLaserBeamDistance()/self.LaserRange, 0.1, Color(255,255,255,255))
 	end
 end

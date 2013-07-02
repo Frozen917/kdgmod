@@ -106,84 +106,84 @@ TOOL.Devices = {
         func = ore_container_func,
         devices = {
             --[[small_ore_container1 = {
-                Name = "Medium " .. capitalize(MiningAddon.OreTypes[1]) .. " Container",
+                Name = "Medium " .. capitalize(MiningAddon.Ores[1]) .. " Container",
                 model = "models/mandrac/ore_container/ore_small.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = {[ MiningAddon.OreTypes[1] ] = smallContenance}
+					res = {[ MiningAddon.Ores[1] ] = smallContenance}
 				}
             },]]
             medium_ore_container1 = {
-                Name = "Medium " .. capitalize(MiningAddon.OreTypes[1]) .. " Container",
+                Name = "Medium " .. capitalize(MiningAddon.Ores[1]) .. " Container",
                 model = "models/mandrac/ore_container/ore_medium.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = {[ MiningAddon.OreTypes[1] ] = mediumContenance}
+					res = {[ MiningAddon.Ores[1] ] = mediumContenance}
 				}
             },
             large_ore_container1 = {
-                Name = "Large " .. capitalize(MiningAddon.OreTypes[1]) .. " Container",
+                Name = "Large " .. capitalize(MiningAddon.Ores[1]) .. " Container",
                 model = "models/mandrac/ore_container/ore_large.mdl",
                 skin = 0,
                 legacy = false,
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[1] ] = largeContenance}
+					res = { [ MiningAddon.Ores[1] ] = largeContenance}
 				}
             },
 			--[[small_ore_container2 = {
-                Name = "Small " .. capitalize(MiningAddon.OreTypes[1]) .. " Container",
+                Name = "Small " .. capitalize(MiningAddon.Ores[1]) .. " Container",
                 model = "models/mandrac/ore_container/ore_small.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[2] ] = smallContenance}
+					res = { [ MiningAddon.Ores[2] ] = smallContenance}
 				}
             },]]
             medium_ore_container2 = {
-                Name = "Medium " .. capitalize(MiningAddon.OreTypes[2]) .. " Container",
+                Name = "Medium " .. capitalize(MiningAddon.Ores[2]) .. " Container",
                 model = "models/mandrac/ore_container/ore_medium.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[2] ] = mediumContenance}
+					res = { [ MiningAddon.Ores[2] ] = mediumContenance}
 				}
             },
             large_ore_container2 = {
-                Name = "Large " .. capitalize(MiningAddon.OreTypes[2]) .. " Container",
+                Name = "Large " .. capitalize(MiningAddon.Ores[2]) .. " Container",
                 model = "models/mandrac/ore_container/ore_large.mdl",
                 skin = 0,
                 legacy = false,
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[2] ] = largeContenance}
+					res = { [ MiningAddon.Ores[2] ] = largeContenance}
 				}
             },
 			--[[small_ore_container3 = {
-                Name = "Small " .. capitalize(MiningAddon.OreTypes[3]) .. " Container",
+                Name = "Small " .. capitalize(MiningAddon.Ores[3]) .. " Container",
                 model = "models/mandrac/ore_container/ore_small.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[3] ] = smallContenance}
+					res = { [ MiningAddon.Ores[3] ] = smallContenance}
 				}
             },]]
             medium_ore_container3 = {
-                Name = "Medium " .. capitalize(MiningAddon.OreTypes[3]) .. " Container",
+                Name = "Medium " .. capitalize(MiningAddon.Ores[3]) .. " Container",
                 model = "models/mandrac/ore_container/ore_medium.mdl",
                 skin = 0,
                 legacy = false, --these two vars must be defined per ent as the old tanks (defined in external file) require different values
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[3] ] = mediumContenance}
+					res = { [ MiningAddon.Ores[3] ] = mediumContenance}
 				}
             },
             large_ore_container3 = {
-                Name = "Large " .. capitalize(MiningAddon.OreTypes[3]) .. " Container",
+                Name = "Large " .. capitalize(MiningAddon.Ores[3]) .. " Container",
                 model = "models/mandrac/ore_container/ore_large.mdl",
                 skin = 0,
                 legacy = false,
 				ent_extras = {
-					res = { [ MiningAddon.OreTypes[3] ] = largeContenance}
+					res = { [ MiningAddon.Ores[3] ] = largeContenance}
 				}
             },
         },

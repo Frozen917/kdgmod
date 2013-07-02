@@ -13,5 +13,6 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Vector", 1, "LaserBeamDirection" )
 	self:NetworkVar( "Float", 0, "LaserBeamDistance" )
 	self:NetworkVar( "String", 0, "OreType" )
+	self:NetworkVar( "String", 1, "CustomEntName" )
 	self:NetworkVar( "Bool", 0, "Mining" )
 end

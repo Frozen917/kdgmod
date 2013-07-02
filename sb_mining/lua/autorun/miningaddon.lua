@@ -1,42 +1,45 @@
 if not MiningAddon then MiningAddon = {} end
 
-MiningAddon.AsteroidModels = {
+MiningAddon.AsteroidModels = {}
 	--[["models/ce_ls3additional/asteroids/asteroid_200.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_250.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_300.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_350.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_400.mdl",
 	"models/ce_ls3additional/asteroids/asteroid_450.mdl",
-	"models/ce_ls3additional/asteroids/asteroid_500.mdl"]]
+	"models/ce_ls3additional/asteroids/asteroid_500.mdl"
 	"models/mandrac/asteroid/geode1.mdl",
 	"models/mandrac/asteroid/geode2.mdl",
 	"models/mandrac/asteroid/geode3.mdl",
-	"models/mandrac/asteroid/geode4.mdl"
-}
+	"models/mandrac/asteroid/geode4.mdl"]]
 
-MiningAddon.OreTypes = {
-	"ore1",
-	"ore2",
-	"ore3"
-}
-MiningAddon.OreColors = {}
-MiningAddon.OreColors["ore1"] = Color(0,0,255)
-MiningAddon.OreColors["ore2"] = Color(0,255,0)
-MiningAddon.OreColors["ore3"] = Color(255,0,0)
-
-local function deepCopy(tab)
-	local toR = {}
-	for k,v in pairs(tab) do
-		if type(v) == "table" then
-			toR[k] = deepCopy(v)
-		elseif type(v) == "Vector" then
-			toR[k] = Vector(v.x, v.y, v.z)
-		else
-			toR[k] = v
-		end
+MiningAddon.Ores = {}
+MiningAddon.LaserColors = {}
+function MiningAddon.RegisterOre(sName, cColor)
+	if sName then
+		table.insert(MiningAddon.Ores, sName)
+		MiningAddon.LaserColors[sName] = cColor or Color(255,255,255)
 	end
-	return toR
 end
+
+function MiningAddon.RegisterAsteroidModel(sName, sModel, tSkinTable)
+	if sModel and sName and not MiningAddon.AsteroidModels[sName] then
+		local t = {}
+		t.model = sModel
+		t.skins = tSkinTable or {}
+		
+		MiningAddon.AsteroidModels[sName] = t
+	end
+end
+
+MiningAddon.RegisterOre("Spessartine", Color(255,152,0))
+MiningAddon.RegisterOre("Torbenite", Color(5,103,0))
+MiningAddon.RegisterOre("Dioptase", Color(0,97,100))
+
+MiningAddon.RegisterAsteroidModel("Geode 1", "models/mandrac/asteroid/geode1.mdl", {Spessartine = 3, Torbenite = 1, Dioptase = 2 })
+MiningAddon.RegisterAsteroidModel("Geode 2", "models/mandrac/asteroid/geode2.mdl", {Spessartine = 3, Torbenite = 1, Dioptase = 2 })
+MiningAddon.RegisterAsteroidModel("Geode 3", "models/mandrac/asteroid/geode3.mdl", {Spessartine = 3, Torbenite = 1, Dioptase = 2 })
+MiningAddon.RegisterAsteroidModel("Geode 4", "models/mandrac/asteroid/geode4.mdl", {Spessartine = 3, Torbenite = 1, Dioptase = 2 })
 
 if SERVER then
 	MiningAddon.AsteroidSpots = {
@@ -77,7 +80,7 @@ if SERVER then
 			--local ores = table.Copy(MiningAddon.OreTypes)
 			
 			local currentResAmount = math.random(math.min(MiningAddon.MaxResourcePerAsteroid*MiningAddon.MinModelScale, MiningAddon.MaxResourcePerAsteroid/10) , MiningAddon.MaxResourcePerAsteroid)
-			res[MiningAddon.OreTypes[spot.oreIndex]] = currentResAmount
+			res[spot.oreType] = currentResAmount
 			--[[for _, ore in ipairs(ores) do
 				if math.random() >= 0.5 and currentResAmount <= MiningAddon.MaxResourcePerAsteroid then
 					local a = math.random((MiningAddon.MaxResourcePerAsteroid - currentResAmount)/10, MiningAddon.MaxResourcePerAsteroid - currentResAmount)
@@ -85,11 +88,14 @@ if SERVER then
 					currentResAmount = currentResAmount + a
 				end
 			end]]
-			local model = MiningAddon.AsteroidModels[math.random(1, #MiningAddon.AsteroidModels)]
-			asteroid:SetAngles(Angle(math.random(0,360), math.random(0,360), math.random(0,360)))
+			local modelInfo = table.Random(MiningAddon.AsteroidModels)
+			local model = modelInfo.model
+			
 			asteroid:Setup(model, res, asteroidPos, spot)
+			asteroid:SetSkin(modelInfo.skins[spot.oreType] or 1)
+			
+			asteroid:SetAngles(Angle(math.random(0,360), math.random(0,360), math.random(0,360)))
 			asteroid:Spawn()
-			asteroid:SetSkin(spot.oreIndex)
 			asteroid:Activate()
 			asteroid:SetNetworkedString("Owner","World")
 			
@@ -106,9 +112,9 @@ if SERVER then
 		for _, spot in pairs(MiningAddon.currentSpots) do
 			MiningAddon.AsteroidCount = MiningAddon.AsteroidCount + spot.asteroidCount
 			local newCount = math.random(MiningAddon.MinAsteroidsPerSpot, MiningAddon.MaxAsteroidsPerSpot)
-			print("newCount = "..newCount)
-			if spot.asteroidCount == 0 then spot.oreIndex = math.random(1, #MiningAddon.OreTypes) end
-			print("oreIndex = " .. spot.oreIndex)
+			if spot.asteroidCount == 0 then
+				spot.oreType = table.Random(MiningAddon.Ores)
+			end
 			if spot.asteroidCount < newCount and not spot.spawning and MiningAddon.AsteroidCount + (newCount - spot.asteroidCount) <= MiningAddon.MaxAsteroids then
 				spot.spawning = true
 				timer.Simple(math.random(MiningAddon.MinRespawnTime, MiningAddon.MaxRespawnTime), function()
@@ -135,7 +141,7 @@ if SERVER then
 					spotPos = pos,
 					asteroidCount = 0,
 					spawning = false,
-					oreIndex = nil
+					oreType = nil
 				}
 			end -- On vérifie qu'il y a assez d'astéroides toutes les 15 secondes
 			timer.Create("RefillAsteroidSpots", 15, 0, MiningAddon.RefillAsteroidSpots)
@@ -145,20 +151,25 @@ if SERVER then
 	end
 	hook.Add("InitPostEntity", "StartAsteroidPlacing", MiningAddon.InitAsteroidSpots)
 else
-	if not spawnedMininglasers then spawnedMininglasers = {} end
-	if not spawnedAsteroids then spawnedAsteroids = {} end
 	
-	hook.Add("PostDrawOpaqueRenderables", "MiningAddonAlwaysRender", function()
-		for _, l in pairs(ents.FindByClass("sb_mining_laser")) do
-			if l then
-				l:DrawCustom()
-			end
-		end
+	function MiningAddon.AlwaysDrawEnts()
 		for _, ast in pairs(ents.FindByClass("sb_minable_asteroid")) do
 			if ast then
 				ast:DrawCustom()
 			end
 		end
-	end)
+		for _, l in pairs(ents.FindByClass("sb_mining_laser")) do
+			if l then
+				l:DrawCustom()
+			end
+		end
+	end
+	hook.Add("PostDrawOpaqueRenderables", "MiningAddonAlwaysRender", MiningAddon.AlwaysDrawEnts)
 	
 end
+function MiningAddon.NoAsteroidPickup(ply, ent)
+	if ent:GetClass() == "sb_minable_asteroid" then
+		return false
+	end
+end
+hook.Add("PhysgunPickup", "NoAsteroidPickup", MiningAddon.NoAsteroidPickup)
