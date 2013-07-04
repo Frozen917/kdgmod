@@ -1,5 +1,6 @@
 ENT.Type 			= "anim"
 ENT.Base 			= "base_rd3_entity"
+ENT.RenderGroup 	= RENDERGROUP_BOTH
 
 list.Set("LSEntOverlayText", "sb_mining_laser", { HasOOO = true, resnames = { "energy" }})
 
