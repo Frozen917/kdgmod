@@ -10,7 +10,7 @@ function PlayerSlots.IsAdmin(ply)
 end
 
 function PlayerSlots.IsVip(ply) --DEFINE MEH
-	return false
+	return ply.KDVIP
 end
 
 -- INTERNALS --
